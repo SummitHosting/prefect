@@ -469,6 +469,28 @@ class Call(Generic[T]):
 
         return f"{name}({call_args})"
 
+    def __eq__(self, other):
+        if not isinstance(other, Call):
+            return NotImplemented
+
+        try:
+            self_args = self.args
+            self_kwargs = self.kwargs
+            other_args = other.args
+            other_kwargs = other.kwargs
+        except AttributeError:
+            return self is other
+
+        return (
+            self.future == other.future and
+            self.fn == other.fn and
+            self_args == other_args and
+            self_kwargs == other_kwargs and
+            self.context == other.context and
+            self.timeout == other.timeout and
+            self.runner == other.runner
+        )
+
 
 class Portal(abc.ABC):
     """
